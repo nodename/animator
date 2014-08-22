@@ -1,24 +1,5 @@
 (ns view.view)
 
-
-(defn draw-circle
-  [context center radius line-width scale {:keys [r g b a]
-                                           :or {a 1.0}}]
-  (let [h (.-height (.-canvas context))
-        center-x (* scale (.-x center))
-        center-y (- h (* scale (.-y center)))
-        radius (* scale radius)]
-    (set! (. context -strokeStyle) (str "rgba(" r "," g "," b "," a ")"))
-    (set! (. context -lineWidth) line-width)
-    (.beginPath context)
-    ;; x y radius startAngle endAngle counterClockwise?:
-    (.arc context center-x center-y radius 0 (* 2 Math/PI) false)
-    (.stroke context)))
-
-
-
-
-
 (defn init-canvas
   "Initialize a canvas and return it."
   [parent z-index]

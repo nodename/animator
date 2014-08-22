@@ -26,7 +26,7 @@
 
 
 (defn animator
-  [cursor owner {:keys [parent duration stop? update] :as props}]
+  [cursor owner {:keys [parent stop? update] :as props}]
   (reify
     om/IInitState
     (init-state

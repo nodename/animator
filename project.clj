@@ -27,14 +27,14 @@
       :hooks [cljx.hooks]
 
       :cljsbuild {:builds [{:id "dev"
-                            :source-paths ["src/cljs" "target/generated/cljs"]
+                            :source-paths ["src/cljs"]
                             :compiler {:output-to "resources/public/build/dev/animator.js"
                                        :output-dir "resources/public/build/dev"
                                        :source-map true
                                        :optimizations :none}}
 
                            {:id "prod"
-                            :source-paths ["src/cljs" "target/generated/cljs"]
+                            :source-paths ["src/cljs"]
                             :compiler {:output-to "resources/public/build/prod/animator.js"
                                        :output-dir "resources/public/build/prod"
                                        :source-map "animator.js.map"
