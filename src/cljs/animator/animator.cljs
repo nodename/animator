@@ -1,8 +1,8 @@
-(ns view.animator
+(ns animator.animator
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [cljs.core.async :refer [put! <! chan timeout close!]]
-            [view.view :refer [get-circle-canvas release-circle-canvas]])
+            [cljs.core.async :refer [put! <! chan timeout]]
+            [animator.view :refer [get-circle-canvas release-circle-canvas]])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 ;; A generic one-shot time-based animation compnent.
@@ -22,7 +22,6 @@
              (>! out msg)
              (recur)))
        out)))
-
 
 
 (defn animator

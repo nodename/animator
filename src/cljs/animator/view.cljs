@@ -1,4 +1,4 @@
-(ns view.view)
+(ns animator.view)
 
 (defn init-canvas
   "Initialize a canvas and return it."
