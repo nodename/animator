@@ -14,7 +14,7 @@
 
       :plugins [[lein-cljsbuild "0.3.0"]
                 [lein-simpleton "1.1.0"]
-                [com.keminglabs/cljx "0.4.0"]]
+                [com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]]
 
       :cljx {:builds [{:source-paths ["src/cljx"]
                        :output-path "target/generated/clj"
@@ -28,14 +28,14 @@
 
       :cljsbuild {:builds [{:id "dev"
                             :source-paths ["src/cljs" "target/generated/cljs"]
-                            :compiler {:output-to "resources/public/build/dev/edge_algebra.dev.js"
+                            :compiler {:output-to "resources/public/build/dev/animation.js"
                                        :output-dir "resources/public/build/dev"
                                        :source-map true
                                        :optimizations :none}}
 
                            {:id "prod"
                             :source-paths ["src/cljs" "target/generated/cljs"]
-                            :compiler {:output-to "resources/public/build/prod/edge_algebra.prod.js"
+                            :compiler {:output-to "resources/public/build/prod/animation.js"
                                        :output-dir "resources/public/build/prod"
-                                       :source-map "edge_algebra.prod.js.map"
+                                       :source-map "animation.js.map"
                                        :optimizations :advanced}}]})

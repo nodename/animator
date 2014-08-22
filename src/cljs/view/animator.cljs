@@ -1,8 +1,11 @@
-(ns view.animation
+(ns view.animator
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [cljs.core.async :refer [>! <! chan timeout]])
+            [cljs.core.async :refer [put! <! chan timeout close!]]
+            [view.view :refer [get-circle-canvas release-circle-canvas]])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
+
+;; A one-shot generic time-based animation compnent.
 
 
 ;; https://github.com/jxa/rain/blob/master/src/cljs/rain/async.cljs:
@@ -22,24 +25,27 @@
 
 
 
-(defn animation
-  [cursor owner {:keys [duration stop? update] :as props}]
+(defn animator
+  [cursor owner {:keys [parent duration stop? update] :as props}]
   (reify
     om/IInitState
     (init-state
      [this]
      {:start-time (.now (.-performance js/window))
-      :elapsed-time 0})
+      :elapsed-time 0
+      :stop-timer (chan)
+      :canvas (get-circle-canvas parent)})
 
     om/IWillMount
     (will-mount
      [_]
-     (let [timer (timer-chan 10 :tick (timeout duration))
+     (let [timer (timer-chan 10 :tick (om/get-state owner :stop-timer))
            start-time (om/get-state owner :start-time)]
        (go-loop []
                 (let [tick (<! timer)
                       time (.now (.-performance js/window))
                       elapsed-time (- time start-time)]
+                  ;; set-state! will trigger a render-state request:
                   (om/set-state! owner :elapsed-time elapsed-time))
                 (recur))))
 
@@ -47,9 +53,13 @@
     (render-state
      [this state]
      (let [elapsed-time (:elapsed-time state)
-           canvas (. js/document (getElementById "anim-canvas"))]
-       (println "render-state: elapsed-time:" elapsed-time)
-       (when (not (stop? elapsed-time props))
+           canvas (om/get-state owner :canvas)]
+       (if (stop? elapsed-time props)
+         (do
+           (put! (om/get-state owner :stop-timer) :stop)
+           (release-circle-canvas canvas))
          (update elapsed-time canvas props)))
 
+     ;; render-state must return a component although we don't need one.
+     ;; This is the minimal thing we can return:
      (dom/div #js {}))))
