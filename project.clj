@@ -1,5 +1,5 @@
-(defproject edge-algebra "0.1.0-SNAPSHOT"
-  :description "A simple Om animation component."
+(defproject animator "0.1.0-SNAPSHOT"
+  :description "A generic Om component for one-shot time-based animation."
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -28,14 +28,14 @@
 
       :cljsbuild {:builds [{:id "dev"
                             :source-paths ["src/cljs" "target/generated/cljs"]
-                            :compiler {:output-to "resources/public/build/dev/animation.js"
+                            :compiler {:output-to "resources/public/build/dev/animator.js"
                                        :output-dir "resources/public/build/dev"
                                        :source-map true
                                        :optimizations :none}}
 
                            {:id "prod"
                             :source-paths ["src/cljs" "target/generated/cljs"]
-                            :compiler {:output-to "resources/public/build/prod/animation.js"
+                            :compiler {:output-to "resources/public/build/prod/animator.js"
                                        :output-dir "resources/public/build/prod"
-                                       :source-map "animation.js.map"
+                                       :source-map "animator.js.map"
                                        :optimizations :advanced}}]})

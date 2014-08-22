@@ -5,7 +5,7 @@
             [view.view :refer [get-circle-canvas release-circle-canvas]])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-;; A one-shot generic time-based animation compnent.
+;; A generic one-shot time-based animation compnent.
 
 
 ;; https://github.com/jxa/rain/blob/master/src/cljs/rain/async.cljs:
