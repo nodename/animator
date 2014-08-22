@@ -2,7 +2,7 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [cljs.core.async :refer [put! <! chan timeout]]
-            [animator.view :refer [get-circle-canvas release-circle-canvas]])
+            [animator.canvas :refer [get-canvas]])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 ;; A generic one-shot time-based animation compnent.
@@ -33,7 +33,7 @@
      {:start-time (.now (.-performance js/window))
       :elapsed-time 0
       :stop-timer (chan)
-      :canvas (get-circle-canvas parent)})
+      :canvas (get-canvas parent)})
 
     om/IWillMount
     (will-mount
@@ -54,9 +54,7 @@
      (let [elapsed-time (:elapsed-time state)
            canvas (om/get-state owner :canvas)]
        (if (stop? elapsed-time props)
-         (do
-           (put! (om/get-state owner :stop-timer) :stop)
-           (release-circle-canvas canvas))
+         (put! (om/get-state owner :stop-timer) :stop)
          (update elapsed-time canvas props)))
 
      ;; render-state must return a component although we don't need one.
