@@ -5,7 +5,7 @@
             [animator.canvas :refer [get-canvas]])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-;; A generic one-shot time-based animation compnent.
+;; A generic one-shot time-based animation component.
 
 
 ;; https://github.com/jxa/rain/blob/master/src/cljs/rain/async.cljs:
