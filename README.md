@@ -1,14 +1,14 @@
 # edge-algebra
 
-A Clojure library designed to ... well, that part is up to you.
+A generic Om component for one-shot time-based animation.
 
 ## Usage
 
-FIXME
+See example.cljs.
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014 Alan Shaw
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
