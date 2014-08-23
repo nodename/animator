@@ -74,6 +74,15 @@
                 :color {:r 0 :g 255 :b 0}
                 :delay 0
                 :duration 2000}))
+
+(def m2 (merge common-opts
+               {:center {:x 200 :y 340}
+                :radius 25
+                :line-width 2
+                :scale 1
+                :color {:r 0 :g 0:b 255}
+                :delay 750
+                :duration 1250}))
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -92,4 +101,4 @@
          (atom {})
          ;; We're not using target, but it cannot be null:
          {:target (. js/document (getElementById "dummy"))
-          :opts [{:opts m0} {:opts m1}]})
+          :opts [{:opts m0} {:opts m1} {:opts m2}]})
