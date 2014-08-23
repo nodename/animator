@@ -41,8 +41,8 @@
      (let [timer (timer-chan 10 :tick (om/get-state owner :stop-timer))
            start-time (om/get-state owner :start-time)]
        (go-loop []
-                (let [tick (<! timer)
-                      time (.now (.-performance js/window))
+                (<! timer)
+                (let [time (.now (.-performance js/window))
                       elapsed-time (- time start-time)]
                   ;; set-state! will trigger a render-state request:
                   (om/set-state! owner :elapsed-time elapsed-time))
