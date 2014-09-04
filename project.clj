@@ -37,5 +37,5 @@
                             :source-paths ["src/cljs"]
                             :compiler {:output-to "resources/public/build/prod/animator.js"
                                        :output-dir "resources/public/build/prod"
-                                       :source-map "animator.js.map"
+                                       :source-map "resources/public/build/prod/animator.js.map"
                                        :optimizations :advanced}}]})

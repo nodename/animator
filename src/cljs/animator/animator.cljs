@@ -2,61 +2,57 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [cljs.core.async :refer [put! <! chan timeout]]
-            [animator.canvas :refer [get-canvas]])
+            [animator.clock :refer [clock]])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-;; A generic one-shot time-based animation component.
 
+(defn canvas-id
+  [index]
+  (str "animator-canvas-" index))
 
-;; https://github.com/jxa/rain/blob/master/src/cljs/rain/async.cljs:
-(defn timer-chan
-  "create a channel which emits a message every delay milliseconds
-   if the optional stop parameter is provided, any value written
-   to stop will terminate the timer"
-  ([delay msg]
-     (timer-chan delay msg (chan)))
-  ([delay msg stop]
-     (let [out (chan)]
-       (go-loop []
-           (when-not (= stop (second (alts! [stop (timeout delay)])))
-             (>! out msg)
-             (recur)))
-       out)))
+(defn get-canvas
+  [index]
+  (. js/document (getElementById (canvas-id index))))
+
+(defn canvas-props
+  [index]
+  #js {:id (canvas-id index)
+       :style #js {:position "absolute" :left "0px" :top "0px"
+                   :width "800px" :height "400px"
+                   :z-index (* 2 (inc index))}
+       :width "800px" :height "400px"})
+
 
 
 (defn animator
-  [cursor owner {:keys [parent stop? update] :as props}]
+  [animations owner {:keys [parent stop? update] :as props}]
   (reify
+    om/IInitState
     om/IInitState
     (init-state
      [this]
-     {:start-time (.now (.-performance js/window))
-      :elapsed-time 0
-      :stop-timer (chan)
-      :canvas (get-canvas parent)})
+     {:clock (clock 10)})
+   ;; :start-time must be injected
 
     om/IWillMount
     (will-mount
      [_]
-     (let [timer (timer-chan 10 :tick (om/get-state owner :stop-timer))
-           start-time (om/get-state owner :start-time)]
+     (let [[clock] (om/get-state owner :clock)]
        (go-loop []
-                (<! timer)
-                (let [time (.now (.-performance js/window))
-                      elapsed-time (- time start-time)]
-                  ;; set-state! will trigger a render-state request:
+                (let [now (<! clock)
+                      elapsed-time (- now (om/get-state owner :start-time))]
                   (om/set-state! owner :elapsed-time elapsed-time))
                 (recur))))
 
     om/IRenderState
     (render-state
-     [this state]
-     (let [elapsed-time (:elapsed-time state)
-           canvas (om/get-state owner :canvas)]
-       (if (stop? elapsed-time props)
-         (put! (om/get-state owner :stop-timer) :stop)
-         (update elapsed-time canvas props)))
+     [_ {:keys [elapsed-time] :as state}]
+     (doseq [index (range (count animations))]
+       (let [animation (nth animations index)
+             canvas (get-canvas index)]
+         (when canvas ;; who knows exactly when it mounts
+           (update elapsed-time canvas animation))))
 
-     ;; render-state must return a component although we don't need one.
-     ;; This is the minimal thing we can return:
-     (dom/div #js {}))))
+       (apply dom/div #js {}
+              (map (fn [index] (dom/canvas (canvas-props index)))
+                   (range (count animations)))))))
