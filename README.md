@@ -1,6 +1,6 @@
-# edge-algebra
+# animator
 
-A generic Om component for one-shot time-based animations.
+A generic Om component for time-based canvas animations.
 
 ## Usage
 
