@@ -25,7 +25,7 @@
 
 
 (defn animator
-  [animations owner {:keys [parent stop? update] :as props}]
+  [animations owner {:keys [update] :as props}]
   (reify
     om/IInitState
     om/IInitState
