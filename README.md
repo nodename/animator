@@ -2,6 +2,8 @@
 
 A generic Om component for time-based canvas animations.
 
+NOTE: Superseded by a better version: https://github.com/omcljs/om-cookbook/tree/master/recipes/animator
+
 ## Usage
 
 See example.cljs.
